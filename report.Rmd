@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # Assignment 1
 
 # Assignment 2
-# Comparison of Mixture Model with Different Number of Clusters (\( M \))
+# MIXTURE MODELS
 
 The EM algorithm was run for a Bernoulli Mixture Model with different values of \( M \) (number of clusters), specifically \( M = 2 \), \( M = 3 \), and \( M = 4 \). The objective was to analyze how the number of clusters influences the model's behavior, particularly its impact on the log-likelihood values and the convergence process.
 
@@ -81,6 +81,29 @@ While the log-likelihood improves as the number of clusters increases, the addit
 
 
 # Assignment 3
+##  In an ensemble model, is it true that the larger the number B of ensemble members the more flexible the ensemble model?
+No, increasing the number \( B \) of ensemble members does not make the model more flexible. Instead, it reduces variance. As stated on **page 169** of the main course book, the flexibility is determined by the base learners, not \( B \).
+
+##  In AdaBoost, what is the loss function used to train the boosted classifier at each iteration?
+In AdaBoost, the loss function used to train the boosted classifier at each iteration is the **exponential loss**, given by:
+
+\[
+L(y \cdot f(x)) = \exp(-y \cdot f(x))
+\]
+
+This is discussed on **page 177** of the main course book.
+
+## Sketch how you would use cross-validation to select the number of components (or clusters) in unsupervised learning of GMMs.
+
+
+To use cross-validation for selecting the number of components \( M \) in GMMs:
+
+1. Split the data into a **training set** and a **validation set**.
+2. Train GMM models on the training set with different numbers of components \( M \).
+3. Compute the **log-likelihood** of the validation set for each trained model.
+4. Select the model with the **highest log-likelihood** on the validation set as the best choice for \( M \).
+
+This ensures the optimal number of clusters is selected while balancing model flexibility and generalization. This process is explained on **page 267** of the course book.
 
 # Appendix
 ## Asssignment 1
