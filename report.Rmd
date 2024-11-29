@@ -9,6 +9,10 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Statement of Contribution
+ - Nisal Amashan(nisra674) - Assignment 2, Assignment 3, Report
+ - John Möller (johmo870) - Assignment 1, Report
+ 
 # Assignment 1
 
 # Assignment 2
