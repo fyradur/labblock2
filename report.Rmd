@@ -257,7 +257,131 @@ This ensures the optimal number of clusters is selected while balancing model fl
 
 # Appendix
 ## Asssignment 1
+```{r}
+library(randomForest)
 
+run_rf_and_compute_error <- function(ntree, nodesize) {
+  
+  x1 <- runif(100)
+  x2 <- runif(100)
+  trdata <- cbind(x1, x2)
+  y <- as.numeric(x1 < x2)
+  trlabels <- as.factor(y)
+  
+  rf_model <- randomForest(trdata, trlabels, ntree = ntree, nodesize = nodesize, keep.forest = TRUE)
+  
+  x1_test <- runif(1000)
+  x2_test <- runif(1000)
+  tedata <- cbind(x1_test, x2_test)
+  colnames(tedata) <- colnames(trdata)  
+  y_test <- as.numeric(x1_test < x2_test)
+  telabels <- as.factor(y_test)
+  
+  predictions <- predict(rf_model, tedata)
+  error_rate <- mean(predictions != telabels)
+  return(error_rate)
+}
+
+errors_1_tree <- run_rf_and_compute_error(1, 25)
+errors_10_trees <- run_rf_and_compute_error(10, 25)
+errors_100_trees <- run_rf_and_compute_error(100, 25)
+
+errors_1_tree
+errors_10_trees
+errors_100_trees
+
+# Function to repeat procedure for 1000 datasets
+repeat_rf_for_multiple_datasets <- function(ntree_value, nodesize_value) {
+  errors <- numeric(1000)
+  for (i in 1:1000) {
+    errors[i] <- run_rf_and_compute_error(ntree_value, nodesize_value)
+  }
+  mean_error <- mean(errors)
+  var_error <- var(errors)
+  return(c(mean_error, var_error))
+}
+
+# Run for 1, 10, and 100 trees
+result_1_tree <- repeat_rf_for_multiple_datasets(1, 25)
+result_10_trees <- repeat_rf_for_multiple_datasets(10, 25)
+result_100_trees <- repeat_rf_for_multiple_datasets(100, 25)
+
+# Display the results for mean and variance of errors
+result_1_tree
+result_10_trees
+result_100_trees
+
+run_rf_condition_x1 <- function(ntree, nodesize) {
+  
+  x1 <- runif(100)
+  x2 <- runif(100)
+  trdata <- cbind(x1, x2)
+  y <- as.numeric(x1 < 0.5)
+  trlabels <- as.factor(y)
+  
+  rf_model <- randomForest(trdata, trlabels, ntree = ntree, nodesize = nodesize, keep.forest = TRUE)
+  
+  # Generate test data
+  x1_test <- runif(1000)
+  x2_test <- runif(1000)
+  tedata <- cbind(x1_test, x2_test)
+  colnames(tedata) <- colnames(trdata)
+  y_test <- as.numeric(x1_test < 0.5)
+  telabels <- as.factor(y_test)
+  
+  # Make predictions and calculate misclassification error
+  predictions <- predict(rf_model, tedata)
+  error_rate <- mean(predictions != telabels)
+  return(error_rate)
+}
+
+# Run for 1, 10, and 100 trees
+errors_1_tree_x1 <- run_rf_condition_x1(1, 25)
+errors_10_trees_x1 <- run_rf_condition_x1(10, 25)
+errors_100_trees_x1 <- run_rf_condition_x1(100, 25)
+
+# Display the error rates for different numbers of trees
+errors_1_tree_x1
+errors_10_trees_x1
+errors_100_trees_x1
+
+# Function to run random forest with more complex condition
+run_rf_complex_condition <- function(ntree_value, nodesize_value) {
+  
+  # Generate training data with the complex condition
+  x1 <- runif(100)
+  x2 <- runif(100)
+  trdata <- cbind(x1, x2)
+  y <- as.numeric((x1 < 0.5 & x2 < 0.5) | (x1 > 0.5 & x2 > 0.5))
+  trlabels <- as.factor(y)
+  
+  # Train the random forest
+  rf_model <- randomForest(trdata, trlabels, ntree = ntree_value, nodesize = nodesize_value, keep.forest = TRUE)
+  
+  # Generate test data
+  x1_test <- runif(1000)
+  x2_test <- runif(1000)
+  tedata <- cbind(x1_test, x2_test)
+  colnames(tedata) <- colnames(trdata)
+  y_test <- as.numeric((x1_test < 0.5 & x2_test < 0.5) | (x1_test > 0.5 & x2_test > 0.5))
+  telabels <- as.factor(y_test)
+  
+  # Make predictions and calculate misclassification error
+  predictions <- predict(rf_model, tedata)
+  error_rate <- mean(predictions != telabels)
+  return(error_rate)
+}
+
+# Run for 1, 10, and 100 trees with nodesize = 12
+errors_1_tree_complex <- run_rf_complex_condition(1, 12)
+errors_10_trees_complex <- run_rf_complex_condition(10, 12)
+errors_100_trees_complex <- run_rf_complex_condition(100, 12)
+
+# Display the error rates for different numbers of trees
+errors_1_tree_complex
+errors_10_trees_complex
+errors_100_trees_complex
+```
 ## Asssignment 2
 ```{r Asssignment_2, echo=TRUE, eval=FALSE}
 set.seed(1234567890)
